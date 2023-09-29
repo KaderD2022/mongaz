@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous"></script
+    <title>DocList</title>
+</head>
+<body>
+    <h1>DocList</h1>
+    <div id="collections" >
+    {% for collection in collections %}
+        <button hx-post="{% url 'get-tasks' collection.pk %}"
+                hx-push-url="?collection={{ collection.slug }}"
+                hx-target="#task ">{{ collection.name }}</button>
+    {% endfor %}
+    </div>
+    <form method="POST" action="{% url 'add-collection' %}" >
+        {% csrf_token %}
+
+        <input type="text" name="collection-name"  >
+        <button hx-post="{% url 'add-collection' %}"
+                hx-target="#collections"
+                hx-swap="beforeend"
+                type= "submit">
+            Ajouter
+        </button>
+    </form>
+
+    <form method="POST" action="{% url 'add-task' %}" >
+        {% csrf_token %}
+
+        <input type="text" name="task-description"  >
+        <button hx-post="{% url 'add-task' %}"
+                hx-vals='{"collection": getCollectionFromUrl()}'
+                hx-target="#task"
+                hx-swap="beforeend"
+                type= "submit">
+            Ajouter
+        </button>
+    </form>
+
+    <div id="task" >
+        {% for task in tasks %}
+            <p>{{ task.description }}</p>
+        {% endfor %}
+        {% include 'tasks/tasks.html' with tasks=tasks %}
+    </div>
+
+    <script>
+        document.body.addEventListener("htmx:responseError", function(evt){
+            alert(evt.detail.xhr.responseText);
+        })
+        function getCollectionFromUrl() {
+            let url = new uRl(window.locution.href);(
+            let searchParams = url.searchParams;
+            return  searchParams.get("collection");
+        }
+    </script>
+    <script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous">
+
+    </script>
+</body>
+</html>
+

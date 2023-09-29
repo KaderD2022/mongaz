@@ -1,0 +1,220 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="card card-sm">
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col">
+                        <input type="search" placeholder="Entrez le nom du produit que vous cherchez" name="item-name" class="form-control form-control-borderless">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success">Recherche</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for product in product_object %}
+        <div class="col-md-3">
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-3 offset-md-4">
+            <ul class="pagination">
+                {% if product_object.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ product_object.previous_page_number }}">Precedent</a>
+                    </li>
+                {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ product_object.number }}">{{ product_object.number }}</a>
+                    </li>
+
+                {% if product_object.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ product_object.next_page_number }}">Suivant</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        console.log('Juste pour tester ');
+        if(localStorage.getItem('panier') == null){
+            var panier = {};
+        }else{
+            panier = JSON.parse(localStorage.getItem('panier'));
+        }
+        $(document).on('click', '.ted', function(){
+            console.log('ajouter');
+            var item_id = this.id.toString();
+            console.log(item_id);
+            if(panier[item_id] != undefined){
+                quantite = panier[item_id][0] +1 ;
+                panier[item_id][0] = quantite;
+                panier[item_id][2] += parseFloat(document.getElementById("price"+item_id).innerHTML);
+            }else{
+                quantite = 1;
+                prix = parseFloat(document.getElementById("price"+item_id).innerHTML);
+                nom =  document.getElementById("aa"+item_id).innerHTML;
+                panier[item_id] = [quantite, nom, prix ];
+
+            }
+            console.log(panier);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            document.getElementById("panier").innerHTML ="Panier("+ Object.keys(panier).length+")";
+
+        });
+        AfficherList(panier);
+        function AfficherList(panier){
+            var panierString = " ";
+            panierString += "<h5>Voici votre liste</h5>";
+            var index = 1;
+            for(var x in panier){
+                panierString += index;
+                if(document.getElementById("aa"+x) != null){
+                    panierString += document.getElementById("aa"+x).innerHTML + " Qte: "+ panier[x][0] + "</br>";
+                }
+
+                index +=1;
+            }
+            panierString += "<a href='/checkout' class='btn btn-primary'>Checkout</a>";
+            $('[data-toggle="popover"]').popover();
+            document.getElementById('panier').setAttribute('data-content', panierString);
+        }
+
+    </script>
+
+{% endblock %}
+
+
+
+<div class="container">
+    <div class="row">
+    
+    <section class="ls section_padding_top_100 section_padding_bottom_100 columns_padding_30">
+    
+                <div class="col-sm-7 col-md-8 col-lg-8 col-sm-push-5 col-md-push-4 col-lg-push-4">
+                    <div class="shop-sorting">
+                        <form class="content-justify v-center content-margins">
+                            <div> Showing 1-6 of 36 results </div>
+                            <div class="form-group"> <select aria-required="true" id="date" name="date">
+                        <option value="">Default Sorting</option>
+                        <option value="value">by Value</option>
+                        <option value="date">by Date</option>
+                        <option value="popular">by Popularity</option>
+                    </select> </div>
+                        </form>
+                    </div>
+                    <div class="columns-2">
+                        <ul id="products" class="products list-unstyled">
+
+                            {% for product in products %}
+                            <li class="product type-product loop-color">
+                                <article class="vertical-item content-padding with_border text-center">
+                                    <div class="item-media"> <img src="{{ product.images }}" alt="" /> </div>
+                                    <div class="item-content">
+                                        <div class="item-meta small-text"> <span class="price">
+                                    <span class="amount"></span>{{ product.price  }} </span>
+                                        </div>
+                                        <h3 class="entry-title topmargin_5"> <a href="shop-product.html">{{ product.product_name }}</a> </h3>
+                                        <p class="content-3lines-ellipsis">{{ product.description }}</p>
+                                        <p class="topmargin_30"> <a href="#" class="theme_button color1 inverse min_width_button add_to_cart">Add to cart</a> </p>
+                                    </div>
+                                </article>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                    <!-- eof .columns-* -->
+                    <div class="text-center">
+                        <ul class="pagination">
+                            <li class="disabled"><a href="#"><span class="sr-only">Prev</span><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#"><span class="sr-only">Next</span><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="col-sm-5 col-md-4 col-lg-4 col-sm-pull-7 col-md-pull-8 col-lg-pull-8">
+                    <div class="widget widget_search">
+                        <h3 class="widget-title">Search</h3>
+                        <form method="get" class="searchform" action="https://html.modernwebtemplates.com/diversify/">
+                            <div class="form-group margin_0"> <label class="sr-only" for="widget-search">Search for:</label> <input id="widget-search" type="text" value="" name="search" class="form-control" placeholder="Search Products..."> </div> <button type="submit" class="theme_button color1">Search</button>									</form>
+                    </div>
+                    <div class="widget widget_categories">
+                        <h3 class="widget-title">Categories</h3>
+                        <ul class="greylinks">
+                            <li> <a href="shop.html">Picanha turducken</a> <span>/ 34</span>
+                                <ul>
+                                    <li> <a href="shop.html">Tail Meatball</a> <span>/ 15</span> </li>
+                                    <li> <a href="shop.html">Sausage Beef</a> <span>/ 19</span> </li>
+                                </ul>
+                            </li>
+                            <li> <a href="shop.html">Jowl Corned</a> <span>/ 27</span>
+                                <ul>
+                                    <li> <a href="shop.html">Pork Chop</a> <span>/ 15</span> </li>
+                                    <li> <a href="shop.html">Beef Pork Loin</a> <span>/ 12</span> </li>
+                                </ul>
+                            </li>
+                            <li> <a href="#0">Ground Round</a> <span>/ 38</span> </li>
+                        </ul>
+                    </div>
+                    <div class="widget widget_price_filter">
+                        <h3 class="widget-title">Filter by Price</h3>
+                        <!-- price slider -->
+                        <form method="get" action="https://html.modernwebtemplates.com/" class="form-inline">
+                            <div class="slider-range-price"></div>
+                            <div class="price_label" style=""> Price: <span class="price_from">2</span> - <span class="price_to">35</span> </div>
+                            <div class="topmargin_20"> <button type="submit" class="theme_button color3 min_width_button">Filter</button> </div>
+                        </form>
+                    </div>
+                    <div class="widget widget_shopping_cart">
+                        <h3 class="widget-title">Your Cart</h3>
+                        <div class="widget_shopping_cart_content">
+                            <ul class="cart_list product_list_widget">
+                                <li class="media">
+                                    <div class="media-left media-middle"> <a href="shop-product.html">
+                        <img src="images/shop/01.jpg" class="muted_background" alt="">
+                    </a> </div>
+                                    <div class="media-body media-middle"> <a href="#" class="remove" title="Remove this item"></a>
+                                        <h4> <a href="shop-product.html">Drumstick short ribs</a> </h4> <span class="product-quantity">
+                        <span>1 x</span> <span class="price">$56.69</span> </span>
+                                    </div>
+                                </li>
+                                <li class="media">
+                                    <div class="media-left media-middle"> <a href="shop-product.html">
+                        <img src="images/shop/02.jpg" class="muted_background" alt="">
+                    </a> </div>
+                                    <div class="media-body media-middle"> <a href="#" class="remove" title="Remove this item"></a>
+                                        <h4> <a href="shop-product.html">Drumstick short ribs</a> </h4> <span class="product-quantity">
+                        <span>1 x</span> <span class="price">$13.25</span> </span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <p class="total"> <span>Subtotal:</span> <span class="price">$69.94</span> </p>
+                            <p class="buttons"> <a href="shop-cart.html" class="theme_button color4">View cart</a> <a href="shop-cart.html" class="theme_button color4 inverse">Checkout</a> </p>
+                        </div>
+                    </div>
+                </aside>
+                <!-- eof aside sidebar -->
+            </div>
+        </div>
+    </div>
+    </section>

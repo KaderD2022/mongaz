@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+    <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
+    <title>DocList</title>
+</head>
+<body>
+    <h1>DocList</h1>
+    <div id="collections" >
+    {% for collection in collections %}
+        <button  hx-get="{% url 'get-tasks' %}"
+                 hx-target="#tasks">{{ collection.name }}</button>
+    {% endfor %}
+    </div>
+    <form method="POST" action="{% url 'add-collection' %}" >
+        {% csrf_token %}
+
+        <input type="text" name="collection-name"  >
+        <button hx-post="{% url 'add-collection' %}"
+                hx-target="#collections"
+                hx-swap="beforeend"
+                type= "submit">
+            Ajouter
+        </button>
+    </form>
+
+    <form method="POST" action="{% url 'add-task' %}" >
+        {% csrf_token %}
+        <input type="text" name="task-description"  >
+        <button hx-post="{% url 'add-task' %}"
+                hx-target="#tasks"
+                hx-swap="beforeend"
+                type="submit">
+            Ajouter
+        </button>
+    </form>
+    <div  id="tasks" >
+        {% for task in tasks %}
+            <p>{{ task.description }}</p>
+        {% endfor %}
+    </div>
+
+
+    <script>
+        document.body.addEventListener("htmx:responseError", function(evt){
+            alert(evt.detail.xhr.responseText);
+
+        })
+    </script>
+
+</body>
+</html>

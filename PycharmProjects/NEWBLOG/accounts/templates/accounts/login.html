@@ -1,0 +1,37 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            <h1 class="fw-bolder">Welcome to Blog Home!</h1>
+            <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+        </div>
+    </div>
+</header>
+<div class=" px-5 my-5">
+    <div class="container px-5 my-5">      
+        <form id="contactForm"   method="post"  >
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input class="form-control" id="newField" name="username" type="text" placeholder="Votre nom d'utilisateur"  data-sb-validations="required">
+                <label for="newField">Username</label>
+                <div class="invalid-feedback" data-sb-feedback="newField:required">username is required.</div>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" id="emailAddress"  name="password" type="password" placeholder="Votre mot de pass" data-sb-validations="required,email"
+                />
+                <label for="emailAddress">Votre Mot De Passe </label>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:required">Password  is required.</div>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:email">Password is not valid.</div>
+            </div>
+
+            <div class="d-grid">
+                <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> 
+{% endblock %}

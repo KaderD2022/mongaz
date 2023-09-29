@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>DOCLIST</title>
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+    <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>DOCLIST</h1>
+    <div id="collection" >
+        {% for collection in collections %}
+            <h1>{{ collection.name | safe }}</h1>
+        {% endfor %}
+    </div>
+
+
+
+    <form action="{% url 'add-collection' %}" method="POST" >
+
+
+        <label for="collection-name">Collection : </label>
+        <input type="text" id="collection-name" name="collection-name" >
+        <button type="submit"
+                hx-get="{% url 'add-collection' %}"
+                hx-target="#collection"
+                hx-swap="beforeend"
+                >Ajouter</button>
+    </form>
+
+    <form action="{% url 'add-task' %}"  method="POST" >
+        {% csrf_token %}
+
+        <input type="text" id="task-description">
+        <button
+                hx-get="{% url 'add-task' %}"
+                hx-target="#tasks"
+                hx-swap="beforeend"
+                type="submit" >
+
+             Ajouter
+        </button>
+    </form>
+    <div id="tasks">
+        {% for task in tasks %}
+            <p>{{ task.description | safe }}</p>
+        {% endfor %}
+    </div>
+
+        <script>
+            document.body.addEventListener("htmx:responseError", function(evt){
+                alert(evt.detail.xhr.responseText);
+
+                })
+     </script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <form method="post" action="{% url 'enregistrer_commande' %}">
+        {% csrf_token %}
+        <label>Produit:</label>
+        <input type="text" name="produit"><br>
+        <label>Quantité:</label>
+        <input type="number" name="quantite"><br>
+        <label >Numero:</label>
+        <input type="number" name="numero"><br>
+        <label>Adresse de livraison:</label>
+        <input type="text" name="adresse_livraison"><br>
+        <label>Date de livraison:</label>
+        <input type="date" name="date_livraison"><br>
+        <button type="submit">Passer commande</button>
+      </form>
+      
+
+
+
+
+</div>
+    
+{% endblock %}

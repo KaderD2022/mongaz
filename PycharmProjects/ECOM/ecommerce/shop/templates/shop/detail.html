@@ -1,0 +1,22 @@
+{% extends 'shop/base.html'%}
+
+
+{% block content %}
+<div class="row" >
+    <div class="col-md-6" >
+        <img src="{{ product.image }}" alt="">
+    </div>
+
+    <div class="col-md-6" >
+        <div class="text-warning display-3" >{{ product.title }}</div>
+        <div class="text-danger" >{{ product.description }}</div>
+        <div  >{{ product.price }}</div>
+        <a href="#">
+            <button class="btn btn-success"  >
+                Ajouter
+            </button>
+        </a>
+    </div>
+</div>
+{% endblock %}
+

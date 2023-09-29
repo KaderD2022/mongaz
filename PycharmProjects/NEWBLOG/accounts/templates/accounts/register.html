@@ -1,0 +1,48 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<div class="container">
+    <h1 class="text-danger"  >Voici le formulaire d'enregristrement</h1>
+    <h2>grdryyyyyyyyyeeeee</h2>
+    <form id="contactForm" data-sb-form-api-token="API_TOKEN" action="." method="post"  >
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                {{ user_form.username }}
+                <label for="{{ user_form.username.id_for_label }}">Username</label>
+                <div class="invalid-feedback" data-sb-feedback="newField:required">username is required.</div>
+            </div>
+            <div class="form-floating mb-3">
+                {{ user_form.first_name }}
+                <label for="{{ user_form.first_name.id_for_label }}">Lastname</label>
+                <div class="invalid-feedback" data-sb-feedback="newField:required">username is required.</div>
+            </div>
+            <div class="form-floating mb-3">
+                {{ user_form.last_name }}
+                <label for="{{ user_form.last_name.id_for_label }}">Firstname</label>
+                <div class="invalid-feedback" data-sb-feedback="newField:required">username is required.</div>
+            </div>
+            <div class="form-floating mb-3">
+                {{ user_form.email }}
+                <label for="{{ user_form.email.id_for_label }}">Email</label>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:required">Password  is required.</div>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:email">Password is not valid.</div>
+            </div>
+            <div class="form-floating mb-3">
+                {{ user_form.password }}
+                <label for="{{ user_form.password.id_for_label }}">mot de pass </label>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:required">Password  is required.</div>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:email">Password is not valid.</div>
+            </div>
+            <div class="form-floating mb-3">
+                {{ user_form.confirm_password }}
+                <label for="{{ user_form.confirm_password.id_for_label }}">Votre  repeter Mot De Passe</label>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:required">Password  is required.</div>
+                <div class="invalid-feedback" data-sb-feedback="emailAddress:email">Password is not valid.</div>
+            </div>
+
+            <div class="d-grid">
+                <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit</button>
+            </div>
+        </form>
+</div>
+{% endblock %}

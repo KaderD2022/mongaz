@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container px-5 my-5">
+    <div class="row">
+        <div class="col-md-6">
+            {% for messag in messages %}
+            <p class="alert alert-error mt-3" style="font-size:30px; color:red;">{{message}}</p>
+            {% endfor %}
+            <form id="contactForm" data-sb-form-api-token="API_TOKEN" method="POST" action=".">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="emailAddress" name="username" type="text"
+                        placeholder="Email Address" data-sb-validations="required,email" />
+                    <label for="emailAddress">Username</label>
+                    <div class="invalid-feedback" data-sb-feedback="emailAddress:required">Email Address is required.
+                    </div>
+                    <div class="invalid-feedback" data-sb-feedback="emailAddress:email">Email Address Email is not
+                        valid.</div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="emailAddress" name="password" type="password"
+                        placeholder="Email Address" data-sb-validations="required,email" />
+                    <label for="message">password</label>
+                    <div class="invalid-feedback" data-sb-feedback="message:required">Password is required.</div>
+                </div>
+                <div class="d-none" id="submitSuccessMessage">
+                    <div class="text-center mb-3">
+                        <div class="fw-bolder">Form submission successful!</div>
+                        <p>To activate this form, sign up at</p>
+                        <a
+                            href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                    </div>
+                </div>
+                <div class="d-none" id="submitErrorMessage">
+                    <div class="text-center text-danger mb-3">Error sending message!</div>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit</button>
+                </div>
+            </form>
+            {% for message in messages %}
+            <p class="alert alert-error mt-3" style="font-size:30px; color:red;">{{message}}</p>
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS884yE-aP3PQdStnZ7KZecX04EDdYa2YpRgQ&usqp=CAU" alt="" sizes="" srcset="">
+        </div>
+
+    </div>
+
+
+</div>
+{% endblock %}

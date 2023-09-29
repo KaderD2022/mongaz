@@ -1,0 +1,58 @@
+{% extends "base.html" %} 
+{% block content %}
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            <h1 class="fw-bolder">Welcome to Blog Home!</h1>
+            <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+        </div>
+    </div>
+</header>>
+<div class="container">
+    <div class="row">
+
+        {%  if query %}
+        <h1>Posts containing "{{ query }}"</h1>
+        <h3>
+            {% with results.count as total_results %}
+                Found {{ total_results }} result{{ total_results|pluralize }}
+            {% endwith %}
+
+        </h3>
+        {%  endif  %}
+        {% for post in results %}
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <a href="#!"><img class="card-img-top" src="{{ post.image }}" alt="..." /></a>
+                <div class="card-body">
+                    <div class="small text-muted">{{ post.publish }}</div>
+                    <h2 class="card-title h4">{{ post.title }}</h2>
+                    <p class="card-text">{{ post.body|truncatechars:50 }}</p>
+                    <a class="btn btn-primary" href="{% url  'detail' post.slug %}">Read more →</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Pagination-->
+    {% include "layout/pagination.html" with page=posts %}
+</div>
+<!-- Side widgets-->
+<div class="col-lg-4">
+    <!-- Search widget-->
+    <div class="card mb-4">
+
+        <div class="card-header">Search</div>
+        <div class="card-body">
+            <form method="get">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search"
+                    />
+                    <button class="btn btn-primary" id="button-search" type="submit">Go!</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
